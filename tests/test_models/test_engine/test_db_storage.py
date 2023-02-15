@@ -68,7 +68,7 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestDBStorageInit(unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """Test the DBstorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
@@ -88,7 +88,7 @@ class TestDBStorageInit(unittest.TestCase):
         """Test that save properly saves objects to file.json"""
 
 
-class TestDBStorage(unittest.TestCase):
+class TestDBStorageNew(unittest.TestCase):
     """Test the DBstorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_get(self):
