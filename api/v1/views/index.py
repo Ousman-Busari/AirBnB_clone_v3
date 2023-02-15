@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" app views index files """
+"""
+app views index files
+"""
 from flask import jsonify
 from api.v1.views import app_views
 
