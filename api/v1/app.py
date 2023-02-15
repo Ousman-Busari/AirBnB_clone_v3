@@ -2,7 +2,7 @@
 """
 API setup with flask
 """
-from flask import Flask
+from flask import Flask, make_response
 from models import storage
 from api.v1.views import app_views
 from os import getenv
@@ -13,7 +13,7 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def close_app():
+def close_app(exception):
     """ closes the app and all connections """
     storage.close()
 
