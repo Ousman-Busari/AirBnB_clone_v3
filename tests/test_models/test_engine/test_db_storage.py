@@ -69,7 +69,7 @@ test_db_storage.py'])
 
 
 class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
+    """Test the DBstorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -90,25 +90,27 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_get(self):
         """Test that get returns the object with the right id and right type"""
-        storage = DBStorage()
+        storage = FileStorage()
         new_obj = State()
         storage.new(new_obj)
         new_obj_id = new_obj.id
-        get_ret_1 = storage.get(State, new_obj_id)
-        self.assertEqual(type(get_ret_1), State)
-        self.assertIs(new_obj, get_ret_1)
-        get_ret_2 = storage.get(State, "018382924092928982093083239")
-        self.assertEqual(get_ret_2, None)
+        get_ret = storage.get(State, new_obj_id)
+        self.assertEqual(type(get_ret), State)
+        self.assertIs(new_obj, get_ret)
+        get_ret = storage.get(State, "random_id")
+        self.assertEqual(get_ret, None)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_count(self):
-        """Test that get returns the object with the right id"""
-        storage = DBStorage()
+        """Test that count returns the right amount of objects"""
+        storage = FileStorage()
         new_state_obj = State()
         new_place_obj = Place()
         init_all_count = len(storage.all())
         init_state_count = len(storage.all(State))
+        init_user_count = len(storage.all(User))
         storage.new(new_state_obj)
         self.assertEqual(storage.count(State), init_state_count + 1)
         storage.new(new_place_obj)
         self.assertEqual(storage.count(), init_all_count + 2)
+        self.assertEqual(storage.count(User), init_user_count)

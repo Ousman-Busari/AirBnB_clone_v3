@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-flask integration
+API setup with flask
 """
 from flask import Flask
 from models import storage
@@ -18,9 +18,7 @@ def close_app():
     storage.close()
 
 
-host = getenv("HBNB_API_HOST", "0.0.0.0")
-port = getenv("HBNB_API_PORT", "5000")
-
-
 if __name__ == "__main__":
-    app.run(host=host, port=port, threaded=True)
+    HOST = getenv("HBNB_API_HOST", "0.0.0.0")
+    PORT = getenv("HBNB_API_PORT", "5000")
+    app.run(host=HOST, port=PORT, threaded=True)
