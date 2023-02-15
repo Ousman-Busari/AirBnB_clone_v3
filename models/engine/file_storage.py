@@ -73,9 +73,10 @@ class FileStorage:
         """ retrieves an object that belongs to the give class - cls -
         with the given id - id."""
         if cls and id:
-            obj_key = "{}.{}".format(cls.__name__, id)
-            cls_all = self.all(cls)
-            return cls_all.get(obj_key)
+            cls_all_obj = list(self.all(cls).values())
+            for obj in cls_all_obj:
+                if obj.id == id:
+                    return obj
         return None
 
     def count(self, cls=None):
