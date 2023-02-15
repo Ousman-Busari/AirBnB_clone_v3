@@ -119,7 +119,7 @@ class TestFileStorage(unittest.TestCase):
         """Test that get returns the object with the right id and right type"""
         storage = FileStorage()
         new_obj = State()
-        storage.new(new_obj)
+        storage.new(new_obj)        
         new_obj_id = new_obj.id
         get_ret = storage.get(State, new_obj_id)
         self.assertEqual(type(get_ret), State)

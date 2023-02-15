@@ -90,7 +90,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_get(self):
         """Test that get returns the object with the right id and right type"""
-        storage = FileStorage()
+        storage = DBStorage()
         new_obj = State()
         storage.new(new_obj)
         new_obj_id = new_obj.id
@@ -103,7 +103,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_count(self):
         """Test that count returns the right amount of objects"""
-        storage = FileStorage()
+        storage = DBStorage()
         new_state_obj = State()
         new_place_obj = Place()
         init_all_count = len(storage.all())
