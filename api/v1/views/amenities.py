@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+amenities object views and CRUD
+"""
 from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from models import storage
