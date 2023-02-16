@@ -60,12 +60,9 @@ def rud_amenity(amenity_id):
         if type(req_body) is not dict:
             abort(400, "Not a JSON")
 
-        if "name" not in req_body:
-            abort(400, "Missing name")
-
         for key, value in req_body.items():
-            if (key is not "id" and key is not "created_at" and
-               key is not "updated_at"):
+            if (key != "id" and key != "created_at" and
+               key != "updated_at"):
                 setattr(amenity, key, value)
 
         storage.save()

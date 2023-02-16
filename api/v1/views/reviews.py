@@ -67,8 +67,8 @@ def rud_city(city_id):
             abort(400, "Not a JSON")
 
         for key, value in req_body.items():
-            if (key != "id" and key != "created_at" and
-               key != "updated_at"):
+            if (key is not "id" and key is not "created_at" and
+               key is not "updated_at"):
                 setattr(city, key, value)
 
         storage.save()
