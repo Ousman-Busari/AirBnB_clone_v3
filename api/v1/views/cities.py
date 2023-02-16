@@ -45,8 +45,8 @@ def post_city_under_state(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["GET", "DELETE", "PUT"],
                  strict_slashes=False)
-def get_city(city_id):
-    """ Retreives a City object """
+def rud_city(city_id):
+    """ reads, updates, and deletes a City object """
     city = storage.get(City, city_id)
 
     if city is None:

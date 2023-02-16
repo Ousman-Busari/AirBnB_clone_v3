@@ -36,8 +36,8 @@ def post_state():
 
 @app_views.route("/states/<state_id>", methods=["GET", "DELETE", "PUT"],
                  strict_slashes=False)
-def state_action(state_id):
-    """ retreives and manipulate a State object """
+def rud_state(state_id):
+    """ reads, updates, amd delete a State object """
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
