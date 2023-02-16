@@ -60,4 +60,4 @@ def state_action(state_id):
                key is not "updated_at"):
                 setattr(state, key, value)
         storage.save()
-        return jsonify(state.to_dict())
+        return jsonify(state.to_dict()), 200
