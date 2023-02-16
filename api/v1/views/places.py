@@ -38,7 +38,7 @@ def post_place_under_city(city_id):
     if "user_id" not in req_body:
         abort(400, "Missing user_id")
 
-    if storage.get(User, req_body.user_id) is None:
+    if storage.get(User, req_body["user_id"]) is None:
         abort(404)
 
     if "name" not in req_body:
