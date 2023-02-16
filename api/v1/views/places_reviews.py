@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Review objects view implementation
+Places' review objects view implementation
 """
 from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
