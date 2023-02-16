@@ -48,6 +48,7 @@ def state_action(state_id):
 
     if request.method == "DELETE":
         storage.delete(state)
+        storage.save()
         return jsonify({}), 200
 
     if request.method == "PUT":
