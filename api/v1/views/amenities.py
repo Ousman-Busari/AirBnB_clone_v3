@@ -34,7 +34,7 @@ def post_amenity():
     new_amenity = Amenity(**req_body)
     storage.new(new_amenity)
     storage.save()
-    return jsonify(new_amenity.to_dict())
+    return jsonify(new_amenity.to_dict()), 201
 
 
 @app_views.route("/amenities/<amenity_id>", methods=["GET", "DELETE", "PUT"],
@@ -69,4 +69,4 @@ def rud_amenity(amenity_id):
                 setattr(amenity, key, value)
 
         storage.save()
-        return jsonify(amenity.to_dict())
+        return jsonify(amenity.to_dict()), 200
