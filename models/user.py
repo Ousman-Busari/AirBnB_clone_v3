@@ -27,11 +27,16 @@ class User(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
+        if kwargs:
+            pwd = kwargs.pop("password", None)
+            if pwd:
+                self.hash_password(pwd)
         super().__init__(*args, **kwargs)
 
     def hash_password(self, pwd):
         """ hashes/encrypt a User object password """
         encrypt = hashlib.md5()
         encrypt.update(pwd.encode("utf-8"))
-        hash_pwd = encrypt.haxdigest()
+        hash_pwd = encrypt.hexdigest()
+        print(hash_pwd)
         setattr(self, "password", hash_pwd)
