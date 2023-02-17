@@ -124,7 +124,7 @@ def places_search():
             amenity_id for amenity_id in req_amenities_ids if storage.get(Amenity, amenity_id)
         ])
         for place in all_places:
-            place_amenities = None
+            place_amenities_ids = None
             if getenv('HBNB_TYPE_STORAGE') == "db":
                 place_amenities_ids = [amenity.id for amenity in place.amenities]
             elif len(place.amenities) > 0:
@@ -138,4 +138,4 @@ def places_search():
     else:
         filtered_places = [place.to_dict() for place in all_places]
 
-    return jsonify(filtered_places), 201
+    return jsonify(filtered_places)
