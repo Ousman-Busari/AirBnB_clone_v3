@@ -3,6 +3,7 @@
 Contains class BaseModel
 """
 
+from os import getenv
 from datetime import datetime
 import models
 from os import getenv
@@ -10,6 +11,7 @@ import sqlalchemy
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
+
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -68,7 +70,7 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
-        if self.__class__.__name__ == "User":
+        if self.__class__.__name__ == "User" and getenv("HBNB_TYPE_STORAGE") == "db":
             del new_dict["password"]
         return new_dict
 
