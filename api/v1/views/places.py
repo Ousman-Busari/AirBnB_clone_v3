@@ -8,6 +8,10 @@ from models import storage
 from models.place import Place
 from models.city import City
 from models.user import User
+from models.state import State
+from models.amenity import Amenity
+from os import getenv
+from sqlalchemy.orm import relationship
 
 
 @app_views.route("/cities/<city_id>/places", strict_slashes=False)
@@ -81,3 +85,61 @@ def rud_place(place_id):
 
         storage.save()
         return jsonify(place.to_dict()), 200
+
+
+@app_views.route("/places_search", methods=["POST"], strict_slashes=False)
+def places_search():
+    """ retrieves all Place objects depending
+    of the JSON in the body of the request """
+    req_body = request.get_json()
+    if type(req_body) is not dict:
+        abort(400, "Not a JSOn")
+
+    combined_cities_unique_ids = []
+    if "states" in req_body and len(req_body["states"]) != 0:
+        states_ids_list = req_body["states"]
+        states_list = [storage.get(State, id) for id in states_ids_list]
+        all_states_cities = []
+
+        for state in states_list:
+            if len(state.cities) != 0:
+                all_states_cities += state.cities
+
+        states_cities_ids = [city.to_dict().get("id")
+                             for city in all_states_cities]
+        combined_cities_unique_ids += states_cities_ids
+
+    if "cities" in req_body and len(req_body["cities"]) != 0:
+        cities_ids_list = req_body["cities"]
+        combined_cities_unique_ids += cities_ids_list
+
+        for city_id in cities_ids_list:
+            if city_id not in combined_cities_unique_ids:
+                combined_cities_unique_ids.append(city_id)
+
+        cities_list = [storage.get(City, city_id)
+                       for city_id in combined_cities_unique_ids]
+
+    if len(combined_cities_unique_ids) == 0:
+        all_places = list(storage.all(Place).values())
+    else:
+        all_places = []
+        for city_id in combined_cities_unique_ids:
+            city = storage.get(City, city_id)
+            all_places += city.places
+
+    if "amenities" in req_body and len(req_body["amenities"]) != 0:
+        amenities_ids_list = req_body["amenities"]
+        amenities_objs_list = [storage.get(Amenity, amenity_id)
+                               for amenity_id in amenities_ids_list]
+        filtered_places = []
+        for place in all_places:
+            place_amenities = place.amenities
+            if all(elem in place_amenities for elem in amenities_objs_list):
+                filtered_places.append(place)
+
+        filtered_places_list = [place.to_dict() for place in filtered_places]
+    else:
+        filtered_places_list = [place.to_dict() for place in all_places]
+
+    return jsonify(filtered_places_list)
