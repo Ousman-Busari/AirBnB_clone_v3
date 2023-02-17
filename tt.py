@@ -21,6 +21,7 @@ if __name__ == "__main__":
 
     r = requests.get("http://0.0.0.0:5000/api/v1/amenities")
     r_j = r.json()
+    print(len(r_j))
     
     for amenity_j in r_j:
         if amenity_j.get('name') == "Soap":

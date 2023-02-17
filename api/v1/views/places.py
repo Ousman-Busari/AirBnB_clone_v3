@@ -95,41 +95,45 @@ def places_search():
     if type(req_body) is not dict:
         abort(400, "Not a JSOn")
 
-    combined_cities_unique_ids = []
+    all_places = list(storage.all(Place).values())
+
     if "states" in req_body and len(req_body.get("states")) != 0:
-        states_ids_list = req_body.get("states")
+        states_ids = req_body.get("states")
 
         all_cities = list(storage.all(City).values())
-        states_cities_ids = [city.id for city in all_cities if city.state_id in states_ids_list]
-        combined_cities_unique_ids += states_cities_ids
-
-    if "cities" in req_body and len(req_body["cities"]) != 0:
-        cities_ids_list = req_body["cities"]
-
-        for city_id in cities_ids_list:
-            if city_id not in combined_cities_unique_ids:
-                combined_cities_unique_ids.append(city_id)
-
-        cities_list = [storage.get(City, city_id)
-                       for city_id in combined_cities_unique_ids]
-
-    if len(combined_cities_unique_ids) == 0:
-        all_places = list(storage.all(Place).values())
+        states_cities = set([city.id for city in all_cities if city.state_id in states_ids])
     else:
-        all_places = []
-        for city_id in combined_cities_unique_ids:
-            city = storage.get(City, city_id)
-            all_places += city.places
+        states_cities = set()
+
+    if "cities" in req_body and len(req_body.get("cities")) != 0:
+        req_cities_ids = req_body.get("cities")
+
+        cities_ids = set([
+            city_id for city_id in req_cities_ids if storage.get(City, city_id)
+        ])
+        states_cities = states_cities.union(cities_ids)
+
+    all_places = list(storage.all(Place).values())
+
+    if len(states_cities) > 0:
+        all_places = [place for place in all_places if place.city_id in states_cities]
 
     if "amenities" in req_body and len(req_body.get("amenities")) != 0:
-        amenities_ids_list = req_body["amenities"]
+        req_amenities_ids = req_body.get("amenities")
 
-        filtered_places = []
+        amenities_ids = set([
+            amenity_id for city_id in req_amenities_ids if storage.get(Amenity, amenity_id)
+        ])
+        filtered_places_list =[]
         for place in all_places:
-            place_amenities_ids = [amenity.id for amenity in
-                                   place.amenities]
-            if (all(elem in place_amenities_ids for elem in
-               amenities_ids_list)):
+            place_amenities = None
+            if get('HBNB_TYPE_STORAGE') == "db":
+                place_amenities_ids = [amenity.id for amenity in place.amenities]
+            elif len(place.amenities) > 0:
+                place_amenities_ids = place.amenities
+
+            if place_amenities and all(elem in place_amenities_ids for elem in
+               amenities_ids_list):
                 filtered_places.append(place)
 
         filtered_places_list = [place.to_dict() for place in filtered_places]
