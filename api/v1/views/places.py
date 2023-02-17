@@ -105,8 +105,6 @@ def places_search():
 
     if "cities" in req_body and len(req_body["cities"]) != 0:
         cities_ids_list = req_body["cities"]
-        combined_cities_unique_ids += cities_ids_list
-        print(combined_cities_unique_ids)
 
         for city_id in cities_ids_list:
             if city_id not in combined_cities_unique_ids:
