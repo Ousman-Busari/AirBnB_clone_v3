@@ -123,9 +123,10 @@ def places_search():
         amenities_ids = set([
             amenity_id for amenity_id in req_amenities_ids if storage.get(Amenity, amenity_id)
         ])
+        print(all_places)
         for place in all_places:
             place_amenities = None
-            if get('HBNB_TYPE_STORAGE') == "db":
+            if getenv('HBNB_TYPE_STORAGE') == "db":
                 place_amenities_ids = [amenity.id for amenity in place.amenities]
             elif len(place.amenities) > 0:
                 place_amenities_ids = place.amenities
