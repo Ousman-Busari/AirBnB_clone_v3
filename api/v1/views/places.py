@@ -101,7 +101,8 @@ def places_search():
         states_ids = req_body.get("states")
 
         all_cities = list(storage.all(City).values())
-        states_cities = set([city.id for city in all_cities if city.state_id in states_ids])
+        states_cities = set([city.id for city in all_cities
+                            if city.state_id in states_ids])
     else:
         states_cities = set()
 
@@ -114,24 +115,27 @@ def places_search():
         states_cities = states_cities.union(cities_ids)
 
     if len(states_cities) > 0:
-        all_places = [place for place in all_places if place.city_id in states_cities]
+        all_places = [place for place in all_places
+                      if place.city_id in states_cities]
 
-    filtered_places =[]
+    filtered_places = []
     if "amenities" in req_body and len(req_body.get("amenities")) != 0:
         req_amenities_ids = req_body.get("amenities")
 
         amenities_ids = set([
-            amenity_id for amenity_id in req_amenities_ids if storage.get(Amenity, amenity_id)
+            amenity_id for amenity_id in req_amenities_ids
+            if storage.get(Amenity, amenity_id)
         ])
         for place in all_places:
             place_amenities_ids = None
             if getenv('HBNB_TYPE_STORAGE') == "db":
-                place_amenities_ids = [amenity.id for amenity in place.amenities]
+                place_amenities_ids = [amenity.id for amenity
+                                       in place.amenities]
             elif len(place.amenities) > 0:
                 place_amenities_ids = place.amenities
 
-            if place_amenities_ids and all(elem in place_amenities_ids for elem in
-               amenities_ids):
+            if place_amenities_ids and all(elem in place_amenities_ids
+               for elem in amenities_ids):
                 filtered_places.append(place)
 
         filtered_places = [place.to_dict() for place in filtered_places]
