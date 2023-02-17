@@ -96,17 +96,12 @@ def places_search():
         abort(400, "Not a JSOn")
 
     combined_cities_unique_ids = []
-    if "states" in req_body and len(req_body["states"]) != 0:
-        states_ids_list = req_body["states"]
-        states_list = [storage.get(State, id) for id in states_ids_list]
-        all_states_cities = []
+    if "states" in req_body and len(req_body.get("states")) != 0:
+        states_ids_list = req_body.get("states")
 
-        for state in states_list:
-            if len(state.cities) != 0:
-                all_states_cities += state.cities
-
-        states_cities_ids = [city.to_dict().get("id")
-                             for city in all_states_cities]
+        all_cities = storage.all(City)
+        states_cities_ids = [city.id for city in all_cities
+                             if city in states_ids_list]
         combined_cities_unique_ids += states_cities_ids
 
     if "cities" in req_body and len(req_body["cities"]) != 0:
@@ -128,18 +123,19 @@ def places_search():
             city = storage.get(City, city_id)
             all_places += city.places
 
-    if "amenities" in req_body and len(req_body["amenities"]) != 0:
+    if "amenities" in req_body and len(req_body.get("amenities")) != 0:
         amenities_ids_list = req_body["amenities"]
-        amenities_objs_list = [storage.get(Amenity, amenity_id)
-                               for amenity_id in amenities_ids_list]
+
         filtered_places = []
         for place in all_places:
-            place_amenities = place.amenities
-            if all(elem in place_amenities for elem in amenities_objs_list):
+            place_amenities_ids = [amenity.id for amenity in
+                                   place.amenities]
+            if (all(elem in place_amenities_ids for elem in
+               amenities_ids_list)):
                 filtered_places.append(place)
 
         filtered_places_list = [place.to_dict() for place in filtered_places]
     else:
         filtered_places_list = [place.to_dict() for place in all_places]
 
-    return jsonify(filtered_places_list)
+    return jsonify(filtered_places_list), 201
