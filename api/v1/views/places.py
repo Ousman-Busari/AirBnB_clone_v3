@@ -99,14 +99,14 @@ def places_search():
     if "states" in req_body and len(req_body.get("states")) != 0:
         states_ids_list = req_body.get("states")
 
-        all_cities = storage.all(City)
-        states_cities_ids = [city.id for city in all_cities
-                             if city in states_ids_list]
+        all_cities = list(storage.all(City).values())
+        states_cities_ids = [city.id for city in all_cities if city.state_id in states_ids_list]
         combined_cities_unique_ids += states_cities_ids
 
     if "cities" in req_body and len(req_body["cities"]) != 0:
         cities_ids_list = req_body["cities"]
         combined_cities_unique_ids += cities_ids_list
+        print(combined_cities_unique_ids)
 
         for city_id in cities_ids_list:
             if city_id not in combined_cities_unique_ids:
