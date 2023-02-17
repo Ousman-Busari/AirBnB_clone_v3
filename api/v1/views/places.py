@@ -118,13 +118,13 @@ def places_search():
     if len(states_cities) > 0:
         all_places = [place for place in all_places if place.city_id in states_cities]
 
+    filtered_places =[]
     if "amenities" in req_body and len(req_body.get("amenities")) != 0:
         req_amenities_ids = req_body.get("amenities")
 
         amenities_ids = set([
             amenity_id for city_id in req_amenities_ids if storage.get(Amenity, amenity_id)
         ])
-        filtered_places =[]
         for place in all_places:
             place_amenities = None
             if get('HBNB_TYPE_STORAGE') == "db":
