@@ -133,7 +133,7 @@ def places_search():
                 place_amenities_ids = place.amenities
 
             if place_amenities and all(elem in place_amenities_ids for elem in
-               amenities_ids_list):
+               req_amenities_ids):
                 filtered_places.append(place)
 
         filtered_places_list = [place.to_dict() for place in filtered_places]
