@@ -123,7 +123,7 @@ def places_search():
         req_amenities_ids = req_body.get("amenities")
 
         amenities_ids = set([
-            amenity_id for city_id in req_amenities_ids if storage.get(Amenity, amenity_id)
+            amenity_id for amenity_id in req_amenities_ids if storage.get(Amenity, amenity_id)
         ])
         for place in all_places:
             place_amenities = None
