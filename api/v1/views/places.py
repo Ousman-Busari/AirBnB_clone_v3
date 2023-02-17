@@ -113,8 +113,6 @@ def places_search():
         ])
         states_cities = states_cities.union(cities_ids)
 
-    all_places = list(storage.all(Place).values())
-
     if len(states_cities) > 0:
         all_places = [place for place in all_places if place.city_id in states_cities]
 
