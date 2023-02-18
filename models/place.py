@@ -69,10 +69,7 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """ getter attribute returns the list of Amenity ids or None """
-            if len(self.amenity_ids) > 0:
-                return amenity_ids
-            else:
-                return None
+            return self.amenity_ids
 
         @amenities.setter
         def amenities(self, amenity_obj):

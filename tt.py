@@ -26,10 +26,10 @@ if __name__ == "__main__":
     r_j = r.json()
     
     for amenity_j in r_j:
-        if amenity_j.get('name') == "Wifi":
+        if amenity_j.get('name') == "Yoga room":
             amenity_ids.append(amenity_j.get('id'))
             break
-
+    print(amenity_ids)
     # Only Places in CityB with Wifi
     
     """ POST /api/v1/places_search

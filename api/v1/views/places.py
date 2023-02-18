@@ -96,32 +96,36 @@ def places_search():
         abort(400, "Not a JSON")
 
     all_places = list(storage.all(Place).values())
+    req_states_ids = req_body.get("states")
 
-    if "states" in req_body and len(req_body.get("states")) > 0:
-        states_ids = req_body.get("states")
+    if req_states_ids and len(req_states_ids) > 0:
 
         all_cities = list(storage.all(City).values())
         states_cities = set([city.id for city in all_cities
-                            if city.state_id in states_ids])
+                            if city.state_id in req_states_ids])
     else:
         states_cities = set()
 
-    if "cities" in req_body and len(req_body.get("cities")) > 0:
-        req_cities_ids = req_body.get("cities")
-
+    print(states_cities)
+    req_cities_ids = req_body.get("cities")
+    if req_cities_ids and len(req_cities_ids) > 0:
         cities_ids = set([
             city_id for city_id in req_cities_ids if storage.get(City, city_id)
         ])
+
+        # if len(states_cities) > 0:
+        #     states_cities = states_cities.union(cities_ids)
+        # else:
         states_cities = states_cities.union(cities_ids)
 
+    print(states_cities)
     if len(states_cities) > 0:
         all_places = [place for place in all_places
                       if place.city_id in states_cities]
 
     filtered_places = []
-    if "amenities" in req_body and len(req_body.get("amenities")) > 0:
-        req_amenities_ids = req_body.get("amenities")
-
+    req_amenities_ids = req_body.get("amenities")
+    if req_amenities_ids and len(req_amenities_ids) > 0:
         amenities_ids = set([
             amenity_id for amenity_id in req_amenities_ids
             if storage.get(Amenity, amenity_id)
@@ -135,7 +139,6 @@ def places_search():
             elif len(place.amenities) > 0:
                 place_amenities_ids = place.amenities
 
-            print(place_amenities_ids)
             if place_amenities_ids and all(elem in place_amenities_ids
                for elem in amenities_ids):
                 filtered_places.append(place)
