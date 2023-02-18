@@ -93,7 +93,7 @@ def places_search():
     of the JSON in the body of the request """
     req_body = request.get_json()
     if type(req_body) is not dict:
-        abort(400, "Not a JSOn")
+        abort(400, "Not a JSON")
 
     all_places = list(storage.all(Place).values())
 
