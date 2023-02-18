@@ -66,16 +66,16 @@ class Place(BaseModel, Base):
                     review_list.append(review)
             return review_list
 
-        # @property
-        # def amenities():
-        #     """ getter attribute returns the list of Amenity ids or None """
-        #     if len(self.amenities_ids) > 0:
-        #         return self.amenities_ids
-        #     else:
-        #         return None
+        @property
+        def amenities(self):
+            """ getter attribute returns the list of Amenity ids or None """
+            if len(self.amenity_ids) > 0:
+                return amenity_ids
+            else:
+                return []
 
         # @amenities.setter
-        # def amenities(self):
+        # def amenities(self, amenity_obj):
         #     """setter attribute sets the list of Amenity instances"""
         #     from models.amenity import Amenity
         #     amenity_list = []

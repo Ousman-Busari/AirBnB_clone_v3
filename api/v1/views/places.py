@@ -126,15 +126,16 @@ def places_search():
             amenity_id for amenity_id in req_amenities_ids
             if storage.get(Amenity, amenity_id)
         ])
-
+        print(amenities_ids)
         for place in all_places:
             place_amenities_ids = None
             if getenv('HBNB_TYPE_STORAGE') == "db":
                 place_amenities_ids = [amenity.id for amenity
                                        in place.amenities]
-            elif len(place.amenity_ids) > 0:
-                place_amenities_ids = place.amenity_ids
+            elif len(place.amenities) > 0:
+                place_amenities_ids = place.amenities
 
+            print(place_amenities_ids)
             if place_amenities_ids and all(elem in place_amenities_ids
                for elem in amenities_ids):
                 filtered_places.append(place)
