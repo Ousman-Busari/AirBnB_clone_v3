@@ -72,7 +72,15 @@ class Place(BaseModel, Base):
             if len(self.amenity_ids) > 0:
                 return amenity_ids
             else:
-                return []
+                return None
+
+        @amenities.setter
+        def amenities(self, amenity_obj):
+            """
+                setter for amenity_ids
+            """
+            if amenity_obj and amenity_obj not in self.amenity_ids:
+                self.amenity_ids.append(amenity_obj.id)
 
         # @amenities.setter
         # def amenities(self, amenity_obj):
