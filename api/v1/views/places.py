@@ -133,7 +133,7 @@ def places_search():
                 place_amenities_ids = [amenity.id for amenity
                                        in place.amenities]
             elif len(place.amenity_ids) > 0:
-                place_amenities_ids = place.amenities
+                place_amenities_ids = place.amenity_ids
 
             if place_amenities_ids and all(elem in place_amenities_ids
                for elem in amenities_ids):
